@@ -1,5 +1,8 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
+
 
 const SidebarItem = ({ item, expanded, onToggle, isOpen }) => {
   const location = useLocation();
@@ -22,7 +25,7 @@ const SidebarItem = ({ item, expanded, onToggle, isOpen }) => {
           {isOpen && <span className={`flex-1   ${isActive ? 'text-black' : 'hover:bg-gray-700'}`}>{item.title}</span>}
           {hasSubItems && isOpen && (
             <span className="ml-2">
-              {expanded ? '▼' : '►'}
+              {expanded ? <IoIosArrowDown/> :<IoIosArrowForward/> }
             </span>
           )}
         </div>
