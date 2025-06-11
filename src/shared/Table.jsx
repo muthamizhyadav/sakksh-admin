@@ -2,9 +2,9 @@ import React from 'react';
 
 function SharedTable({ columns, values }) {
     return (
-        <div className="overflow-x-auto rounded-2xl shadow-lg bg-white">
+        <div className="overflow-x-auto shadow-lg bg-white">
             <table className="min-w-full text-sm font-medium text-gray-800">
-                <thead className="bg-gradient-to-r from-blue-50 to-indigo-50 text-indigo-700 sticky top-0">
+                <thead className="bg-gradient-to-r from-blue-50 to-indigo-50 text-[#0052A8] sticky top-0">
                     <tr>
                         {columns.map((col, index) => (
                             <th

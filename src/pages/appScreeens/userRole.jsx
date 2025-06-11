@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SharedTable from '../../shared/Table';
 import { FiEdit } from "react-icons/fi";
 import SharedButton from '../../shared/button';
 import { primaryColor } from '../../utils/styles';
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiSearch, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
+import { IoMdAdd } from "react-icons/io";
+import { FaUserCog } from "react-icons/fa";
+import SharedModal from '../../shared/popup';
+import SharedInput from '../../shared/input';
+import SharedSelect from '../../shared/select';
+import { IoSaveOutline } from "react-icons/io5";
+
 
 const UserRole = () => {
     const columns = ['Role', 'Description', 'Level', 'Parent Role', 'Region/Location', 'Company', 'Action'];
+    const [opened, setOpened] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = 10;
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const roles = [
+        { value: 'admin', label: 'Admin' },
+        { value: 'manager', label: 'Manager' },
+        { value: 'staff', label: 'Staff' },
+    ];
 
     const values = [
         ['Admin', 'Full access', '1', 'None', 'Global', 'Schoofi',
@@ -58,105 +83,229 @@ const UserRole = () => {
                 />
             </div>
         ],
-        ['Team Lead', 'Leads a team', '4', 'Manager', 'India', 'Schoofi',
+        ['HR', 'Handles employees', '3', 'Manager', 'India', 'Schoofi',
             <div className="space-x-2">
                 <SharedButton
-
-                    icon={<FiEdit />}
-                    onClick={() => alert('Saved!')}
+                    icon={<FiEdit size={20} />}
                 />
-                <button className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+                <SharedButton
+                    icon={<RiDeleteBin6Line size={20} color='red' />}
+                    onClick={() => alert('Saved!')}
+                    className='bg-white border border-red-600'
+                />
             </div>
         ],
-        ['Developer', 'Writes code', '5', 'Team Lead', 'India', 'Schoofi',
+        ['Finance', 'Manages payroll', '3', 'Manager', 'India', 'Schoofi',
             <div className="space-x-2">
                 <SharedButton
-
-                    icon={<FiEdit />}
-                    onClick={() => alert('Saved!')}
+                    icon={<FiEdit size={20} />}
                 />
-                <button className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+                <SharedButton
+                    icon={<RiDeleteBin6Line size={20} color='red' />}
+                    onClick={() => alert('Saved!')}
+                    className='bg-white border border-red-600'
+                />
             </div>
         ],
-        ['Tester', 'Tests applications', '5', 'Team Lead', 'India', 'Schoofi',
+        ['HR', 'Handles employees', '3', 'Manager', 'India', 'Schoofi',
             <div className="space-x-2">
                 <SharedButton
-
-                    icon={<FiEdit />}
-                    onClick={() => alert('Saved!')}
+                    icon={<FiEdit size={20} />}
                 />
-                <button className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+                <SharedButton
+                    icon={<RiDeleteBin6Line size={20} color='red' />}
+                    onClick={() => alert('Saved!')}
+                    className='bg-white border border-red-600'
+                />
             </div>
         ],
-        ['Intern', 'Training role', '6', 'Developer', 'India', 'Schoofi',
+        ['Finance', 'Manages payroll', '3', 'Manager', 'India', 'Schoofi',
             <div className="space-x-2">
                 <SharedButton
-
-                    icon={<FiEdit />}
-                    onClick={() => alert('Saved!')}
+                    icon={<FiEdit size={20} />}
                 />
-                <button className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+                <SharedButton
+                    icon={<RiDeleteBin6Line size={20} color='red' />}
+                    onClick={() => alert('Saved!')}
+                    className='bg-white border border-red-600'
+                />
             </div>
         ],
-        ['Recruiter', 'Finds talent', '4', 'HR', 'India', 'Schoofi',
+        ['HR', 'Handles employees', '3', 'Manager', 'India', 'Schoofi',
             <div className="space-x-2">
                 <SharedButton
-
-                    icon={<FiEdit />}
-                    onClick={() => alert('Saved!')}
+                    icon={<FiEdit size={20} />}
                 />
-                <button className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+                <SharedButton
+                    icon={<RiDeleteBin6Line size={20} color='red' />}
+                    onClick={() => alert('Saved!')}
+                    className='bg-white border border-red-600'
+                />
             </div>
         ],
-        ['Support', 'Handles tickets', '4', 'Manager', 'India', 'Schoofi',
+        ['Finance', 'Manages payroll', '3', 'Manager', 'India', 'Schoofi',
             <div className="space-x-2">
                 <SharedButton
-
-                    icon={<FiEdit />}
-                    onClick={() => alert('Saved!')}
+                    icon={<FiEdit size={20} />}
                 />
-                <button className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+                <SharedButton
+                    icon={<RiDeleteBin6Line size={20} color='red' />}
+                    onClick={() => alert('Saved!')}
+                    className='bg-white border border-red-600'
+                />
             </div>
-        ]
+        ],
+
+
     ];
 
+    const AddRoleForm = () => {
+        const [formData, setFormData] = useState({
+            roleName: '',
+            roleDescription: '',
+            company: '',
+            location: '',
+            parentRole: '',
+            level: '',
+            defaultModule: '',
+        });
+        const [errors, setErrors] = useState({ roleName: '' });
+
+        const handleChange = (key, value) => {
+            setFormData(prev => ({ ...prev, [key]: value }));
+            if (key === 'roleName' && value.trim() !== '') {
+                setErrors(prev => ({ ...prev, roleName: '' }));
+            }
+        };
+
+        const handleSubmit = () => {
+            if (!formData.roleName.trim()) {
+                setErrors({ roleName: 'Role Name is required' });
+                return;
+            }
+            const payload = {
+                roleName: formData.roleName,
+                roleDescription: formData.roleDescription,
+                company: formData.company,
+                location: formData.location,
+                parentRole: formData.parentRole,
+                level: formData.level,
+                defaultModule: formData.defaultModule,
+            };
+            console.log('Submitting Data:', payload);
+        };
+
+        return (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <SharedInput label="Role Name :" placeholder="Enter Role Name"
+                    value={formData.roleName}
+                    onChange={(val) => handleChange('roleName', val)}
+                    error={errors.roleName}
+                />
+                <SharedInput label="Role Description:" placeholder="Role Description" />
+                <SharedSelect
+                    label="Company"
+                    placeholder="Choose Company"
+                    data={roles}
+
+                />
+                <SharedSelect
+                    label="Location"
+                    placeholder="Choose Location"
+                    data={roles}
+                />
+                <SharedSelect
+                    label="Location"
+                    placeholder="Choose Location"
+                    data={roles}
+                />
+                <SharedSelect
+                    label="Parent Role"
+                    placeholder="Choose Parent Role"
+                    data={roles}
+                />
+                <SharedSelect
+                    label="Level"
+                    placeholder="Choose Level"
+                    data={roles}
+                />
+                <SharedSelect
+                    label="Default module after login"
+                    placeholder="Choose Default Module"
+                    data={roles}
+                />
+                <SharedButton
+                    title='Cancel'
+                    onClick={() => alert('Saved!')}
+                    className='bg-white border border-red-600 text-red-600'
+                    textColor='red'
+                />
+                <SharedButton
+                    icon={<IoSaveOutline size={20} />}
+                    title='Save'
+                    onClick={handleSubmit}
+                />
+            </div>
+        )
+    }
 
 
     return (
         <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-gray-800">User Role</h1>
+            <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <FaUserCog size={24} />
+                User Role</h1>
 
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex-1 max-w-md">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+                <div className="w-full sm:max-w-md">
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                            </svg>
+                            <FiSearch className="h-5 w-5 text-gray-400" />
                         </div>
                         <input
                             className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            placeholder="Search..."
+                            placeholder="Search roles..."
                             type="search"
                         />
                     </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                    <div className="pagination-controls">
-                        {/* Your pagination controls here */}
-                        <button className="px-3 py-1 border rounded">Previous</button>
-                        <span className="px-3 py-1">Page 1</span>
-                        <button className="px-3 py-1 border rounded">Next</button>
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-normal">
+                    <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <button
+                            className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={currentPage === 1}
+                        >
+                            <FiChevronLeft className="h-5 w-5" />
+                        </button>
+                        <span className="px-2">Page {currentPage} of {totalPages}</span>
+                        <button
+                            className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={currentPage === totalPages}
+                        >
+                            <FiChevronRight className="h-5 w-5" />
+                        </button>
                     </div>
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Add Role
-                    </button>
+                    <SharedButton
+                        title='Add Role'
+                        iconPosition='left'
+                        icon={<IoMdAdd />
+                        }
+                        onClick={() => setOpened(true)}
+                    />
                 </div>
             </div>
 
             <div>
                 <SharedTable columns={columns} values={values} />
             </div>
+            <SharedModal
+                opened={opened}
+                onClose={() => setOpened(false)}
+                title="+ Add User Role"
+                size='xl'
+            >
+                <AddRoleForm />
+            </SharedModal>
         </div>
     );
 };

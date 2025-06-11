@@ -8,6 +8,7 @@ const SharedButton = ({
     className = '',
     style = {},
     disabled = false,
+    textColor = 'text-white', // new prop with default
 }) => {
     const renderContent = () => {
         if (iconPosition === 'only') {
@@ -27,7 +28,7 @@ const SharedButton = ({
         <button
             onClick={onClick}
             disabled={disabled}
-            className={`p-2 rounded text-white bg-[#0052A8]  cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+            className={`p-2 rounded bg-[#0052A8] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${textColor} ${className}`}
             style={style}
         >
             {renderContent()}
