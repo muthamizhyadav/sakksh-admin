@@ -16,10 +16,10 @@ const SidebarItem = ({ item, expanded, onToggle, isOpen }) => {
       >
         <div
           className={`flex items-center w-full p-3 rounded-md transition-colors 
-            ${isActive ? 'bg-blue-600' : 'hover:bg-gray-700'}`}
+            ${isActive ? 'bg-white' : 'hover:bg-gray-700'}`}
         >
           <span className={`${isOpen ? 'mr-3' : 'mx-auto'}`}>{item.icon}</span>
-          {isOpen && <span className="flex-1">{item.title}</span>}
+          {isOpen && <span className={`flex-1   ${isActive ? 'text-black' : 'hover:bg-gray-700'}`}>{item.title}</span>}
           {hasSubItems && isOpen && (
             <span className="ml-2">
               {expanded ? '▼' : '►'}
@@ -40,7 +40,7 @@ const SidebarItem = ({ item, expanded, onToggle, isOpen }) => {
                   to={subItem.path}
                   className={({ isActive }) =>
                     `block p-2 pl-4 rounded-md transition-colors 
-                    ${isActive || isSubItemActive ? 'bg-blue-500' : 'hover:bg-gray-700'}`
+                    ${isActive || isSubItemActive ? 'bg-white text-black' : 'hover:bg-gray-700'}`
                   }
                   end
                 >
