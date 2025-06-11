@@ -1,0 +1,9 @@
+export const primaryColor = '#0052A8';
+export const secondaryColor = '#7D98BD';
+export const dark_opacity = '#363636BF';
+export const dark_opacity_2 = '#3636368C';
+export const stroke_color = '#0052A833';
+export const option_btn = '#DCEDFF';
+export const option_btn_border = '#BBD9F9';
+export const text_color = '#363636';
+export const warning  = '#C65757';

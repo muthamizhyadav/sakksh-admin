@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SidebarItem from './sideBaritem';
+import { primaryColor } from '../../utils/styles';
 
 const Sidebar = ({ isOpen }) => {
   const [expandedItems, setExpandedItems] = useState({});
@@ -41,7 +42,7 @@ const Sidebar = ({ isOpen }) => {
   ];
 
   return (
-    <aside className={`bg-gray-800 text-white fixed top-16 left-0 h-[calc(100vh-4rem)] z-10 ${
+    <aside style={{ backgroundColor: primaryColor }} className={`text-white fixed top-16 left-0 h-[calc(100vh-4rem)] z-10 ${
       isOpen ? 'w-64' : 'w-20'
     } transition-all duration-300`}>
       <div className="p-4 border-b border-gray-700">

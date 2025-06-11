@@ -1,8 +1,9 @@
 import React from 'react';
+import {primaryColor} from '../utils/styles'
 
 const Navbar = ({ toggleSidebar }) => {
     return (
-        <header className="bg-blue-600 text-white p-4 shadow-md fixed top-0 left-0 right-0 h-16 z-20">
+        <header className="text-white p-4 shadow-md fixed top-0 left-0 right-0 h-16 z-20"  style={{ backgroundColor: primaryColor }}>
             <div className="flex justify-between items-center h-full">
                 <button
                     onClick={toggleSidebar}
