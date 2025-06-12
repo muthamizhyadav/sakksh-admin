@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import SidebarItem from "./sideBaritem";
 import { primaryColor, secondaryColor } from "../../utils/styles";
 import appLogo from "../../assets/images/png/sakkshLogo.png";
+
+
+
 const Sidebar = ({ isOpen }) => {
   const [expandedItems, setExpandedItems] = useState({});
 
@@ -16,13 +19,11 @@ const Sidebar = ({ isOpen }) => {
     {
       id: "dashboard",
       title: "Dashboard",
-      icon: "📊",
       path: "/dashboard",
     },
     {
       id: "setup",
       title: "Setup",
-      icon: "⚙️",
       subItems: [
         { title: "User Role", path: "/user/role" },
         { title: "Roles Access", path: "/role/access" },
@@ -30,11 +31,50 @@ const Sidebar = ({ isOpen }) => {
         { title: "Users", path: "/users" },
       ],
     },
+  
+    {
+      id: "audits",
+      title: "Audits",
+      subItems: [
+        { title: "Audit Checklists", path: "/audits/auditchecklists" },
+      ],
+    },
+
+    {
+      id: "customer survey",
+      title: "Customer survey",
+      subItems: [
+        { title: "Question Master", path: "/customersurvey/questionmaster" },
+        { title: "Create Site Areas", path: "/customersurvey/createsiteareas" },
+         { title: "Generate QR", path: "/customersurvey/generateQR" },
+      ],
+    },
+
+    {
+      id: "reports",
+      title: "Reports",
+      subItems: [
+        { title: "Site Report", path: "/reports/sitereport" },
+      ],
+    },
+    {
+      id: "lead generation",
+      title: "Lead Generation",
+      path:"leadgeneration"
+    },
+     {
+      id: "contact request",
+      title: "Contact Request",
+      subItems: [
+        { title: "Demo Query", path: "/contactrequest/demoquery" },
+         { title: "Sales Query", path: "/contactrequest/salesquery" },
+      ],
+    },
     {
       id: "settings",
       title: "Settings",
-      icon: "⚙️",
       subItems: [
+        { title: "Module", path: "/settings/module" },
         { title: "General", path: "/settings/general" },
         { title: "Security", path: "/settings/security" },
       ],
