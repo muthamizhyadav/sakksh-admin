@@ -38,10 +38,11 @@ const UserRole = () => {
             <div className="space-x-2">
                 <SharedButton
                     icon={<FiEdit size={20} />}
+                    onClick={()=>alert('Edit Page')}
                 />
                 <SharedButton
                     icon={<RiDeleteBin6Line size={20} color='red' />}
-                    onClick={() => alert('Saved!')}
+                    onClick={() => alert('Delete!')}
                     className='bg-white border border-red-600'
                 />
             </div>

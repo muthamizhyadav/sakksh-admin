@@ -8,6 +8,7 @@ import UserRole from './pages/appScreeens/userRole';
 import RoleAccess from './pages/appScreeens/roleAccess';
 import Sites from './pages/appScreeens/sites';
 import Users from './pages/appScreeens/users';
+import CreateSites from './pages/appScreeens/createSite';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="role/access" element={<RoleAccess />} />
               <Route path="site" element={<Sites />} />
               <Route path="users" element={<Users />} />
+              <Route path='createSite' element={<CreateSites/>}/>
             </Route>
           </Route>
         </Routes>
