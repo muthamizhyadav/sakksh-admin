@@ -10,6 +10,7 @@ const SharedInput = ({
     onChange,
     value,
     error,
+    required= false,
     ...rest
 }) => {
     return (
@@ -28,6 +29,7 @@ const SharedInput = ({
                     input: 'border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md',
                     label: 'text-sm font-medium text-gray-700 mb-1',
                 }}
+                required={required}
                 {...rest}
             />
         </div>

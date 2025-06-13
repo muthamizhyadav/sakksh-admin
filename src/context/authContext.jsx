@@ -1,59 +1,88 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import axiosInstance from '../service/axiosInstance';
+import { parseAxiosError } from '../utils/axiosErrorHelper';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // true = checking token
+  const accessKey = 'authToken';
+  const refreshKey = 'refreshToken';
+  const userKey = 'user';
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            fetchUserData(token);
-        } else {
-            setLoading(false);
-        }
-    }, []);
+  /** -------------------------------------------------
+   *  Restore user on initial load
+   *  ------------------------------------------------*/
+  useEffect(() => {
+    const storedToken = localStorage.getItem(accessKey);
+    const storedUser = localStorage.getItem(userKey);
 
-    const fetchUserData = async (token) => {
-        try {
-            // Simulate API call
-            // const response = await fetch('/api/user', { headers: { Authorization: token } });
-            // const userData = await response.json();
-            const userData = { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin' };
-            setUser(userData);
-        } catch (error) {
-            console.error('Failed to fetch user data', error);
-            logout();
-        } finally {
-            setLoading(false);
-        }
-    };
+    if (storedToken && storedUser) {
+      setUser(JSON.parse(storedUser));
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
+    }
+    setLoading(false);
+  }, []);
 
-    const login = async (credentials) => {
-        try {
-            // Simulate API call
-            // const response = await fetch('/api/login', { method: 'POST', body: JSON.stringify(credentials) });
-            // const { token, user } = await response.json();
-            const token = 'fake-jwt-token';
-            const user = { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin' };
-            localStorage.setItem('token', token);
-            setUser(user);
-            return true;
-        } catch (error) {
-            console.error('Login failed', error);
-            return false;
-        }
-    };
+  /** -------------------------------------------------
+   *  Login
+   *  ------------------------------------------------*/
+  const login = useCallback(async ({ email, password }) => {
+    try {
+      const { data, status } = await axiosInstance.post('/auth/login', {
+        email,
+        password,
+      });
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setUser(null);
-    };
+      if (status === 200 && data.token) {
+        localStorage.setItem(accessKey, data.token.accessToken);
+        localStorage.setItem(refreshKey, data.token.refreshToken);
+        localStorage.setItem(userKey, JSON.stringify(data.user));
 
-    return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+        axiosInstance.defaults.headers.common.Authorization =
+          `Bearer ${data.token.accessToken}`;
+
+        setUser(data.user);
+        return { ok: true };
+      }
+      return { ok: false, message: 'Unexpected response' };
+    } catch (err) {
+      const parsed = parseAxiosError(err);
+      
+      console.log('parsed',parsed);         
+
+      if (parsed.kind === 'api') {
+        return { ok: false, message: parsed.data?.message || 'Server error',status:parsed.status };
+      }
+
+       return { ok: false, message: parsed.message };
+
+    }
+  }, []);
+
+  /** -------------------------------------------------
+   *  Logout
+   *  ------------------------------------------------*/
+  const logout = useCallback(() => {
+    localStorage.removeItem(accessKey);
+    localStorage.removeItem(refreshKey);
+    localStorage.removeItem(userKey);
+    delete axiosInstance.defaults.headers.common.Authorization;
+    setUser(null);
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: !!user,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };

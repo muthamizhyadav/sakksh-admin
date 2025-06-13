@@ -3,13 +3,17 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 
 const PrivateRoute = () => {
-    const { user, loading } = useContext(AuthContext);
+  const { isAuthenticated, loading } = useContext(AuthContext);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span className="animate-pulse text-lg font-semibold">Loading…</span>
+      </div>
+    );
+  }
 
-    return user ? <Outlet /> : <Navigate to="/login" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;
