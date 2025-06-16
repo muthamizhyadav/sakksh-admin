@@ -1,39 +1,42 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import SharedInput from "../../shared/input";
 import { Link } from "react-router-dom";
-import axiosInstance from "../../service/axiosInstance";
-import axios from "axios";
+import { AuthContext } from '../../context/authContext';
+
 const Signup = () => {
-  const [register, setRegister] = useState({
+  const [registerData, setRegister] = useState({
     email: "",
     name: "",
     mob_num: "",
     password: "",
     user_role: 3,
   });
+
   const handleChange = (key, value) => {
     setRegister((prev) => ({ ...prev, [key]: value }));
   };
 
+       
+   const { register, loading } = useContext(AuthContext);
+
+
   const handleUserRegister = async (e) => {
     e.preventDefault();
 
-    console.log(register)
-    try {
-      const registerRes = await axios.post("http://localhost:3000/user/register", {
-        email: register.email,
-        name: register.name,
-        pass: register.password,
-        mob_num: register.mob_num,
-        user_role: register.user_role,
-      }
-    )
+    const result = await register({
+      name: registerData.name,
+      email: registerData.email,
+      username: registerData.name,
+      password: registerData.password
+    });
 
-      alert(registerRes)
-      console.log(registerRes)
-    } catch (error) {
-      console.log("error While register");
+    console.log('result',result);
+    
+    if (!result.ok) {
+      setError(result.message);
     }
+  
+
   };
 
   return (
@@ -51,7 +54,7 @@ const Signup = () => {
             <SharedInput
               label="Work Email"
               placeholder="Enter Your email"
-              value={register.email}
+              value={registerData.email}
               onChange={(val) => handleChange("email", val)}
             />
           </div>
@@ -61,7 +64,7 @@ const Signup = () => {
             <SharedInput
               label="Name"
               placeholder="Enter your name"
-              value={register.name}
+              value={registerData.name}
               onChange={(val) => handleChange("name", val)}
             />
             {/* </div> */}
@@ -77,7 +80,7 @@ const Signup = () => {
           <div>
             <SharedInput
               label="Phone number"
-              value={register.mob_num}
+              value={registerData.mob_num}
               onChange={(val) => handleChange("mob_num", val)}
               placeholder="Enter Your Mobile number"
             />
@@ -86,7 +89,7 @@ const Signup = () => {
           <div>
             <SharedInput
               label="Password"
-              value={register.password}
+              value={registerData.password}
               placeholder="**********"
               onChange={(val) => handleChange("password", val)}
             />
