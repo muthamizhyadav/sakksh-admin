@@ -1,6 +1,26 @@
-import React from 'react';
+import React, { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import SharedModal from "../../shared/popup";
+import SharedInput from "../../shared/input";
 
 const Dashboard = () => {
+  const { user } = useContext(AuthContext);
+  console.log(user);
+  // if (user.user_role === 4) {
+  //   return (
+  //     <SharedModal opened={true} >
+  //       <div className="">
+  //         <SharedInput label="Company Name" placeholder="Enter Your company name"/>
+  //         <SharedInput label="Industry" placeholder="Enter Your Industry"/>
+  //         <SharedInput label="Job Title" placeholder="Enter Job Title "/>
+  //         <p>
+  //           fill the company  first
+  //         </p>
+  //       </div>
+  //     </SharedModal>
+  //   );
+  // }
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
@@ -18,9 +38,11 @@ const Dashboard = () => {
           <p className="text-3xl font-bold mt-2 text-purple-600">$12,345</p>
         </div>
       </div>
-      
+
       <div className="bg-white p-6 rounded-lg shadow mt-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          Recent Activity
+        </h2>
         <div className="space-y-4">
           <div className="border-b pb-4 last:border-b-0">
             <p className="text-gray-600">New user registered</p>

@@ -14,23 +14,25 @@ import Signup from './pages/auth/signup';
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route element={<PrivateRoute />}>
-            <Route element={<MainLayout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="user/role" element={<UserRole />} />
-              <Route path="role/access" element={<RoleAccess />} />
-              <Route path="site" element={<Sites />} />
-              <Route path="users" element={<Users />} />
-              <Route path='createSite' element={<CreateSites/>}/>
-            </Route>
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route element={<PrivateRoute />}>
+          <Route element={<MainLayout />}>
+            <Route index              element={<Dashboard />} />
+            <Route path="dashboard"   element={<Dashboard />} />
+            <Route path="user/role"   element={<UserRole />} />
+            <Route path="role/access" element={<RoleAccess />} />
+            <Route path="site"        element={<Sites />} />
+            <Route path="users"       element={<Users />} />
+            <Route path="createSite"  element={<CreateSites />} />
           </Route>
-        </Routes>
-      </AuthProvider>
-    </Router>
+        </Route>
+      </Routes>
+    </AuthProvider>
+  </Router>
+  
   );
 }
 
