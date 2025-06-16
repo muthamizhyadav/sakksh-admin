@@ -9,6 +9,7 @@ import RoleAccess from './pages/appScreeens/roleAccess';
 import Sites from './pages/appScreeens/sites';
 import Users from './pages/appScreeens/users';
 import CreateSites from './pages/appScreeens/createSite';
+import Signup from './pages/auth/signup';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
               <Route index element={<Dashboard />} />

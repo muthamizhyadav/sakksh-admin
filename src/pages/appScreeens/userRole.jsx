@@ -197,6 +197,8 @@ const UserRole = () => {
         };
 
         return (
+            <>
+       
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <SharedInput label="Role Name :" placeholder="Enter Role Name"
                     value={formData.roleName}
@@ -215,11 +217,7 @@ const UserRole = () => {
                     placeholder="Choose Location"
                     data={roles}
                 />
-                <SharedSelect
-                    label="Location"
-                    placeholder="Choose Location"
-                    data={roles}
-                />
+          
                 <SharedSelect
                     label="Parent Role"
                     placeholder="Choose Parent Role"
@@ -235,6 +233,9 @@ const UserRole = () => {
                     placeholder="Choose Default Module"
                     data={roles}
                 />
+            </div>
+            <div className="flex justify-end gap-4 mt-4">
+
                 <SharedButton
                     title='Cancel'
                     onClick={() => alert('Saved!')}
@@ -247,6 +248,8 @@ const UserRole = () => {
                     onClick={handleSubmit}
                 />
             </div>
+                 
+            </>
         )
     }
 

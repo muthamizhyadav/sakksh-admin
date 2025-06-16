@@ -10,6 +10,7 @@ const SharedInput = ({
     onChange,
     value,
     error,
+  
     ...rest
 }) => {
     return (
@@ -24,6 +25,7 @@ const SharedInput = ({
                 value={value}
                 onChange={(e) => onChange?.(e.target.value)}
                 error={error}
+           
                 classNames={{
                     input: 'border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md',
                     label: 'text-sm font-medium text-gray-700 mb-1',
