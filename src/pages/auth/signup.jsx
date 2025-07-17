@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import SharedInput from "../../shared/input";
-import { Link } from "react-router-dom";
-import { AuthContext } from '../../context/authContext';
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
   const [registerData, setRegister] = useState({
@@ -9,41 +10,54 @@ const Signup = () => {
     name: "",
     mob_num: "",
     password: "",
+    companyName:"",
     user_role: 3,
   });
-
+  const [showPassword, setShow] = useState(false);
+  const [fieldErr, setFieldErr] = useState({ email: null, password: null });
+  const navigate = useNavigate();
   const handleChange = (key, value) => {
     setRegister((prev) => ({ ...prev, [key]: value }));
   };
 
-       
-   const { register, loading } = useContext(AuthContext);
-
+  const { register, loading } = useContext(AuthContext);
 
   const handleUserRegister = async (e) => {
     e.preventDefault();
-
-    const result = await register({
+    setFieldErr({ email: null, password: null });
+    // setIsloading(true);
+    const { ok, message, status } = await register({
       name: registerData.name,
       email: registerData.email,
-      username: registerData.name,
-      password: registerData.password
+      mob_num: registerData.mob_num,
+      user_role: registerData.user_role,
+      password: registerData.password,
     });
 
-    console.log('result',result);
-    
-    if (!result.ok) {
-      setError(result.message);
+    if (ok) {
+      navigate("/login");
+    } else {
+      if (status) {
+        if (status == 400) {
+          setFieldErr((p) => ({ ...p, password: message }));
+        } else if (status == 409) {
+          setFieldErr((p) => ({ ...p, email: message }));
+        } else {
+          alert("error while registeration");
+        }
+      } else {
+        alert(message);
+      }
     }
-  
 
+    console.log("result", message, status);
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full">
+      <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl w-full">
         <h1 className="text-2xl font-bold mb-1 text-gray-900">
-          Create your free account
+          Create your free account on <span className=" font-serif text-2xl text-blue-800">Sakksh</span>
         </h1>
         <p className="text-sm text-gray-600 mb-6">
           No credit card, no commitment, and cancel anytime.
@@ -55,8 +69,13 @@ const Signup = () => {
               label="Work Email"
               placeholder="Enter Your email"
               value={registerData.email}
+              error={fieldErr.email}
+              required
               onChange={(val) => handleChange("email", val)}
             />
+          </div>
+          <div className="">
+            <SharedInput label="Company" placeholder="Enter Your Company Name" required/>
           </div>
 
           <div className="">
@@ -65,13 +84,13 @@ const Signup = () => {
               label="Name"
               placeholder="Enter your name"
               value={registerData.name}
+              required
               onChange={(val) => handleChange("name", val)}
             />
             {/* </div> */}
             <div className="w-1/2 hidden">
               <SharedInput
                 label="Last Name"
-
                 placeholder="Enter your last name"
               />
             </div>
@@ -79,7 +98,9 @@ const Signup = () => {
 
           <div>
             <SharedInput
-              label="Phone number"
+              label="Phone number" 
+              // description="Optional"
+    
               value={registerData.mob_num}
               onChange={(val) => handleChange("mob_num", val)}
               placeholder="Enter Your Mobile number"
@@ -91,6 +112,18 @@ const Signup = () => {
               label="Password"
               value={registerData.password}
               placeholder="**********"
+              error={fieldErr.password}
+              type={showPassword ? "text" : "password"}
+              required
+              rightSection={
+                <button
+                  type="button"
+                  onClick={() => setShow((s) => !s)}
+                  className="text-gray-600 hover:text-gray-800"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              }
               onChange={(val) => handleChange("password", val)}
             />
           </div>

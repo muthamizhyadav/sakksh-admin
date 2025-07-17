@@ -55,6 +55,7 @@ const Login = () => {
         <div className="mb-4">
           <SharedInput
             label="Email"
+            ret
             type="email"
             placeholder="Enter your email"
             value={email}

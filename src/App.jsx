@@ -10,6 +10,7 @@ import Sites from './pages/appScreeens/sites';
 import Users from './pages/appScreeens/users';
 import CreateSites from './pages/appScreeens/createSite';
 import Signup from './pages/auth/signup';
+import Profile from './pages/appScreeens/profile';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route element={<MainLayout />}>
             <Route index              element={<Dashboard />} />
+            <Route path='profile/:id' element={<Profile/>}/>
             <Route path="dashboard"   element={<Dashboard />} />
             <Route path="user/role"   element={<UserRole />} />
             <Route path="role/access" element={<RoleAccess />} />
