@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 
 const Profile = ()=>{
      const {id}  = useParams()
-     
+      const accessKey = "authToken";
+     const userKey = localStorage.getItem(accessKey)
+     console.log(userKey)
 
     return(
         <div className="space-x-4">

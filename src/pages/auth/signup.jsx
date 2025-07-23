@@ -10,7 +10,7 @@ const Signup = () => {
     name: "",
     mob_num: "",
     password: "",
-    companyName:"",
+    companyName: "",
     user_role: 3,
   });
   const [showPassword, setShow] = useState(false);
@@ -26,13 +26,10 @@ const Signup = () => {
     e.preventDefault();
     setFieldErr({ email: null, password: null });
     // setIsloading(true);
-    const { ok, message, status } = await register({
-      name: registerData.name,
-      email: registerData.email,
-      mob_num: registerData.mob_num,
-      user_role: registerData.user_role,
-      password: registerData.password,
-    });
+
+    const { ok, message, status } = await register(
+    register
+    );
 
     if (ok) {
       navigate("/login");
@@ -57,7 +54,8 @@ const Signup = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl w-full">
         <h1 className="text-2xl font-bold mb-1 text-gray-900">
-          Create your free account on <span className=" font-serif text-2xl text-blue-800">Sakksh</span>
+          Create your free account on{" "}
+          <span className=" font-serif text-2xl text-blue-800">Sakksh</span>
         </h1>
         <p className="text-sm text-gray-600 mb-6">
           No credit card, no commitment, and cancel anytime.
@@ -75,7 +73,13 @@ const Signup = () => {
             />
           </div>
           <div className="">
-            <SharedInput label="Company" placeholder="Enter Your Company Name" required/>
+            <SharedInput
+              label="Company"
+              value={register.companyName}
+              onChange={(val) => handleChange("companyName", val)}
+              placeholder="Enter Your Company Name"
+              required
+            />
           </div>
 
           <div className="">
@@ -98,9 +102,8 @@ const Signup = () => {
 
           <div>
             <SharedInput
-              label="Phone number" 
+              label="Phone number"
               // description="Optional"
-    
               value={registerData.mob_num}
               onChange={(val) => handleChange("mob_num", val)}
               placeholder="Enter Your Mobile number"

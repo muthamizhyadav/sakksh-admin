@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import SharedTable from "../../shared/Table";
 import { FiEdit } from "react-icons/fi";
 import SharedButton from "../../shared/button";
@@ -14,10 +14,8 @@ import { IoMdAdd } from "react-icons/io";
 import { FaUserCog } from "react-icons/fa";
 import SharedModal from "../../shared/popup";
 import SharedInput from "../../shared/input";
-import SharedSelect from "../../shared/select";
 import { IoSaveOutline } from "react-icons/io5";
 import axiosInstance from "../../service/axiosInstance";
-import { configs } from "eslint-plugin-react-refresh";
 import { AuthContext } from "../../context/authContext";
 import { parseAxiosError } from "../../utils/axiosErrorHelper";
 
@@ -27,12 +25,14 @@ const UserRole = () => {
   const columns = [
     "Role",
     "Description",
-    "Level",
-    "Parent Role",
-    "Region/Location",
-    "Company",
+    // "Level",
+    // "Parent Role",
+    // "Region/Location",
+    // "Company",
     "Action",
   ];
+
+  const [roles, setRoles] = useState([]);
   const [opened, setOpened] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10;
@@ -45,182 +45,8 @@ const UserRole = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  const roles = [
-    { value: "admin", label: "Admin" },
-    { value: "manager", label: "Manager" },
-    { value: "staff", label: "Staff" },
-  ];
 
-  const values = [
-    [
-      "Admin",
-      "Full access",
-      "1",
-      "None",
-      "Global",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton
-          icon={<FiEdit size={20} />}
-          onClick={() => alert("Edit Page")}
-        />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Delete!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "Manager",
-      "Manages departments",
-      "2",
-      "Admin",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton
-          icon={<FiEdit size={20} />}
-          onClick={() => alert("Saved!")}
-        />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "HR",
-      "Handles employees",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "Finance",
-      "Manages payroll",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "HR",
-      "Handles employees",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "Finance",
-      "Manages payroll",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "HR",
-      "Handles employees",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "Finance",
-      "Manages payroll",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "HR",
-      "Handles employees",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-    [
-      "Finance",
-      "Manages payroll",
-      "3",
-      "Manager",
-      "India",
-      "Schoofi",
-      <div className="space-x-2">
-        <SharedButton icon={<FiEdit size={20} />} />
-        <SharedButton
-          icon={<RiDeleteBin6Line size={20} color="red" />}
-          onClick={() => alert("Saved!")}
-          className="bg-white border border-red-600"
-        />
-      </div>,
-    ],
-  ];
-
-  const AddRoleForm = () => {
+  const AddRoleForm = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
       roleName: "",
       roleDescription: "",
@@ -234,7 +60,7 @@ const UserRole = () => {
       }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
       if (!formData.roleName.trim()) {
         setErrors({ roleName: "Role Name is required" });
         return;
@@ -251,11 +77,12 @@ const UserRole = () => {
         );
         if (status === 201) {
           setOpened(false);
+          onSuccess?.();
         }
         // console.log("Submitted successfully:", data , status);
       } catch (err) {
         const parsed = parseAxiosError(err);
-        console.log(parsed);
+
         if (parsed.kind === "api") {
           return {
             ok: false,
@@ -265,7 +92,7 @@ const UserRole = () => {
         }
         return { ok: false, message: parsed.message };
       }
-    };
+    });
 
     return (
       <>
@@ -288,7 +115,7 @@ const UserRole = () => {
         <div className="flex justify-end gap-4 mt-4">
           <SharedButton
             title="Cancel"
-            onClick={() => alert("Saved!")}
+            onClick={() => setOpened(false)}
             className="bg-white border border-red-600 text-red-600"
             textColor="red"
           />
@@ -302,13 +129,35 @@ const UserRole = () => {
     );
   };
 
+  const getRoles = useCallback(async () => {
+    const { status, data } = await axiosInstance.get(
+      `/user/get/roles/${user.id}`
+    );
+    if (status === 200) {
+      const transformed = data.map((item) => [
+        item.role_name ?? "N/A",
+        item.description ?? "N/A",
+        <div className="space-x-2">
+          <SharedButton
+            icon={<FiEdit size={20} />}
+            onClick={() => alert(`Edit role ${item.id}`)}
+          />
+          <SharedButton
+            icon={<RiDeleteBin6Line size={20} color="red" />}
+            onClick={() => alert(`Delete role ${item.id}`)}
+            className="bg-white border border-red-600"
+          />
+        </div>,
+      ]);
+      setRoles(transformed);
+    }
+    console.log("role data", status, data);
+  }, [user.id]);
+
   useEffect(() => {
-    const getRoles = async () => {
-      const {status , data} = await axiosInstance.get(`/user/get/roles/${user.id}`);
-      console.log("role data", status , data );
-    };
     getRoles();
-  }, []);
+  }, [getRoles]);
+
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -357,15 +206,15 @@ const UserRole = () => {
       </div>
 
       <div>
-        <SharedTable columns={columns} values={values} />
+        <SharedTable columns={columns} values={roles} />
       </div>
       <SharedModal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="+ Add User Role"
+        title="Add Role"
         size="xl"
       >
-        <AddRoleForm />
+        <AddRoleForm onSuccess={getRoles} />
       </SharedModal>
     </div>
   );

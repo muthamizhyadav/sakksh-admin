@@ -26,6 +26,7 @@ const SharedButton = ({
 
     return (
         <button
+        
             onClick={onClick}
             disabled={disabled}
             className={`p-2 rounded bg-[#0052A8] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${textColor} ${className}`}

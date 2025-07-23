@@ -6,7 +6,8 @@ import SharedInput from "../../shared/input";
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   console.log(user);
-  // if (user.user_role === 4) {
+
+  // if (user.user_role === 3) {
   //   return (
   //     <SharedModal opened={true} >
   //       <div className="">

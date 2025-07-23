@@ -1,60 +1,86 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SharedTable from "../../shared/Table";
 import SharedButton from "../../shared/button";
-import { BiEdit, BiUser } from "react-icons/bi";
+import { BiEdit, BiStore, BiUser } from "react-icons/bi";
 import { FiChevronLeft, FiChevronRight, FiSearch } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
-import SharedModal from "../../shared/popup";
 import { useNavigate } from "react-router-dom";
+import SharedDrawer from "../../shared/drawer";
+import { AuthContext } from "../../context/authContext";
+import LabelForm from "../../components/LabelForm";
+import { CgAssign } from "react-icons/cg";
+import SharedMenuDropdown from "../../shared/menuDropdown";
+import SharedCheckbox from "../../shared/checkbox";
 
 const Sites = () => {
+  const { user } = useContext(AuthContext);
   const [opened, setOpened] = useState(false);
+  const [drawerOpened, setDrawerOpened] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10;
   const columns = ["Site Name", "Status", "Assignd Survey", "Action"];
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const siteActions = (siteId) => [
+    { label: "View Site", onClick: () => {}, icon: <BiStore size={18} /> },
+    { label: "Edit Site", onClick: () => {}, icon: <BiEdit size={18} /> },
+    {
+      label: "Assign User",
+      onClick: () => {},
+      icon: <CgAssign size={18} />,
+    },
+    {
+      label: "Assign Survey ",
+      onClick: () => {},
+      icon: <CgAssign size={18} />,
+    },
+  ];
 
   const values = [
     [
-      "D Mart(DM2312)",
+      <div className="flex space-x-2 justify-start items-center gap-2">
+        <SharedCheckbox value="D Mart(DM2312)" />
+        <p>D Mart(DM2312)</p>
+      </div>,
       "Active",
       "Survey 1",
       <div className="space-x-2">
-        <SharedButton title="Assign User" icon={<BiUser />} />
-        <SharedButton icon={<BiEdit />} />
-        <SharedButton title="Add Site Roles" />
+        <SharedMenuDropdown items={siteActions(1)} />
       </div>,
     ],
-    ["D Mart(DM12)", "Active", "Survey 2", <div className="space-x-2"></div>],
+    [
+      <div className="flex space-x-2 justify-start items-center gap-2">
+        <SharedCheckbox value="D Mart(DM12)" />
+        <p>D Mart(DM12)</p>
+      </div>,
+      "Active",
+      "Survey 2",
+      <div className="space-x-2">
+        <SharedMenuDropdown items={siteActions(2)} />
+      </div>,
+    ],
   ];
 
-  const createSitesForm = ()=>{
-        const [siteFormData , setSiteFormData] = useState({
-            siteName:'',
-            siteCode:'',
-            siteType:'',
-            siteStatus:'',
-            fullAddress:'',
-            areaName:'',
-            country:'',
-            state:'',
-            city:'',
-            logo:'',
-            latitude:'',
-            longitude:'',
-            secretKey:'',
-            sizeInFt:'',
-            noOfEmployees:'',
-            monthlyRent:'',
-            contorllerId:'',
-        })
-        cosnt [errors, setErrors]= useState({siteName:''})
-  }
+  // const handleChange = () => {};
+  const handleCheckNode = (val) => {
+    setLabels(val);
+  };
 
+  const getAllSites = async () => {
+    try {
+    } catch (err) {
+      console.log("error While Fetching all the Sites", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllSites();
+  }, []);
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-gray-800">Sites</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-medium text-gray-700">Total Users</h3>
@@ -69,6 +95,7 @@ const Sites = () => {
           <p className="text-3xl font-bold mt-2 text-purple-600">$12,345</p>
         </div>
       </div>
+
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
         <div className="w-full sm:max-w-md">
           <div className="relative">
@@ -100,11 +127,13 @@ const Sites = () => {
               <FiChevronRight className="h-5 w-5" />
             </button>
           </div>
+          {/* <SharedButton title="Label" onClick={()=> navigate('/labels')}/> */}
+          <SharedButton title="Label" onClick={() => setDrawerOpened(true)} />
           <SharedButton
             title="Create Sites"
             iconPosition="left"
             icon={<IoMdAdd />}
-            onClick={()=>navigate('/createSite')}
+            onClick={() => navigate("/createSite")}
             // onClick={() => setOpened(true)}
           />
         </div>
@@ -112,29 +141,14 @@ const Sites = () => {
       <div>
         <SharedTable columns={columns} values={values} />
       </div>
-      <SharedModal
-                opened={opened}
-                onClose={() => setOpened(false)}
-                title="Create Sites"
-                size='xl'
-            >
-                {/* <AddUserForm /> */}
-            </SharedModal>
-      <div className="bg-white p-6 rounded-lg hidden shadow mt-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Recent Activity
-        </h2>
-        <div className="space-y-4">
-          <div className="border-b pb-4 last:border-b-0">
-            <p className="text-gray-600">New user registered</p>
-            <p className="text-sm text-gray-400">2 minutes ago</p>
-          </div>
-          <div className="border-b pb-4 last:border-b-0">
-            <p className="text-gray-600">Settings updated</p>
-            <p className="text-sm text-gray-400">15 minutes ago</p>
-          </div>
-        </div>
-      </div>
+      <SharedDrawer
+        opened={drawerOpened}
+        onClose={() => setDrawerOpened(false)}
+        title="Label"
+        size="lg"
+      >
+        <LabelForm />
+      </SharedDrawer>
     </div>
   );
 };

@@ -11,6 +11,9 @@ import Users from './pages/appScreeens/users';
 import CreateSites from './pages/appScreeens/createSite';
 import Signup from './pages/auth/signup';
 import Profile from './pages/appScreeens/profile';
+import Labels from './pages/appScreeens/labels';
+import Audits from './pages/appScreeens/auditScreens/audit';
+import SurveyEdit from './pages/appScreeens/auditScreens/surveyEdit';
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
             <Route path="site"        element={<Sites />} />
             <Route path="users"       element={<Users />} />
             <Route path="createSite"  element={<CreateSites />} />
+            <Route path="labels" element={<Labels/>}/>
+            <Route path='audits/auditchecklists' element={<Audits/>}/>
+            <Route path='audits/survey_edit/:surveyId' element={<SurveyEdit/>} />
           </Route>
         </Route>
       </Routes>

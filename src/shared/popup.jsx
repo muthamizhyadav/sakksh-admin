@@ -16,7 +16,12 @@ const SharedModal = ({
         <Modal
             opened={opened}
             onClose={onClose}
-            title={title}
+            title={
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-lg">{title}</span>
+                </div>
+              }
+        
             size={size}
             centered={centered}
             overlayProps={{
@@ -25,7 +30,7 @@ const SharedModal = ({
                 ...overlayProps,
             }}
             classNames={{
-                title: 'text-lg font-semibold text-gray-800',
+                title: 'text-xl font-extrabold text-black',
                 body: `p-4 ${className}`,
                 content: 'rounded-lg',
             }}

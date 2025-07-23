@@ -2,64 +2,78 @@ import React, { useState } from "react";
 import SharedInput from "../../shared/input";
 import SharedSelect from "../../shared/select";
 import SharedTextArea from "../../shared/textarea";
-import { Country, State, City } from "country-state-city";
+
 import SharedButton from "../../shared/button";
 import { IoSaveOutline } from "react-icons/io5";
 import SharedYesNoRadio from "../../shared/radioButton";
+import TreeSelect from "../../shared/treeselect";
+import TreeDropdown from "../../shared/treeselect";
 
 const CreateSites = () => {
-  const [country, setCountry] = useState();
-  const [state, setState] = useState();
-  const [city, setCity] = useState();
   const [emailMessage, setEmailMessage] = useState("");
   const [smsMessage, setSMSMessage] = useState("");
   const [whatsappMessage, setWhatsAppMessage] = useState("");
 
-  const formattedCountry = Country.getAllCountries().map((country) => ({
-    label: `${country.name}`,
-    value: country.isoCode,
-  }));
-
-  const formattedStates = State.getStatesOfCountry(country).map((state) => ({
-    label: state.name,
-    value: state.isoCode,
-  }));
-
-  const formattedCities = City.getCitiesOfState(country, state).map((city) => ({
-    label: city.name,
-    value: `${city.name.toLocaleLowerCase()} ${city.latitude} ${
-      city.longitude
-    }`,
-  }));
+  const locationData = [
+    { label: "Embassy House Bengaluru", value: "embassy" },
+    { label: "North", isGroup: true },
+    { label: "NCR", value: "ncr", parent: "North" },
+    { label: "Jaipur", value: "jaipur", parent: "North" },
+    { label: "Dehradun", value: "dehradun", parent: "North" },
+    { label: "Lucknow", value: "lucknow", parent: "North" },
+    { label: "South", isGroup: true },
+    { label: "Bengaluru", value: "bengaluru", parent: "South" },
+    { label: "Hyderabad", value: "hyderabad", parent: "South" },
+    { label: "Chennai", value: "chennai", parent: "South" },
+    { label: "East", isGroup: true },
+    { label: "Kolkata EAST", value: "kolkata", parent: "East" },
+    { label: "West", isGroup: true },
+    { label: "Ahemdabad", value: "ahemdabad", parent: "West" },
+    { label: "Pune", value: "pune", parent: "West" },
+    { label: "Mumbai", value: "mumbai", parent: "West" },
+    { label: "Testing label", isGroup: true },
+  ];
 
   const siteTypes = [
-    { label: "Company", value: "company" },
     { label: "Franchise", value: "franchise" },
     { label: "Office", value: "office" },
     { label: "Restaurant", value: "restaurant" },
     { label: "Sites", value: "sites" },
     { label: "Warehouse", value: "warehouse" },
   ];
+  const [selected, setSelected] = useState(null);
+
   const [siteFormData, setSiteFormData] = useState({
     siteName: "",
     siteCode: "",
     siteType: "",
-    siteStatus: "",
     ownerShipType: "",
     fullAddress: "",
-    areaName: "",
-    country: "",
-    state: "",
-    city: "",
-    logo: "",
     latitude: "",
     longitude: "",
-    secretKey: "",
-    sizeInFt: "",
-    noOfEmployees: "",
-    monthlyRent: "",
-    contorllerId: "",
   });
+
+  const treeData = [
+    {
+      label: "Parent 1",
+      value: "p1",
+      children: [
+        { label: "Child 1.1", value: "c1.1" },
+        {
+          label: "Child 1.2",
+          value: "c1.2",
+          children: [
+            { label: "Subchild 1.2.1", value: "sc1.2.1" },
+            { label: "Subchild 1.2.2", value: "sc1.2.2" },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Parent 2",
+      value: "p2",
+    },
+  ];
 
   const [errors, setErrors] = useState({
     siteName: "",
@@ -67,102 +81,75 @@ const CreateSites = () => {
   });
 
   const handleChange = (key, value) => {
+    console.log(key ,value)
     setSiteFormData((prev) => ({ ...prev, [key]: value }));
     //  if(key==="siteName" && value.trim()!== ''){
     //     setErrors(prev=>({...prev, siteName:''}))
     //  }
   };
+  const [selectedLabel, setSelectedLabel] = useState(null);
 
+
+  const handleCreateSite = async()=>{
+    console.log(siteFormData)
+  }
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-800">Create New Site</h1>
+
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <SharedInput
-          label="Site Name:"
+          label="Site Name"
+          required
           onChange={(val) => handleChange("siteName", val)}
           placeholder="Enter Site Name"
+          
         />
         <SharedInput
-          label="Site Code:"
+          label="Site Code"
           onChange={(val) => handleChange("siteCode", val)}
           placeholder="Enter Site Code"
+
         />
         <SharedSelect
           label="Site Type"
           placeholder="Choose Site Type"
           data={siteTypes}
           onChange={(val) => handleChange("siteType", val)}
+          required
         />
-        <SharedSelect
-          label="Site Status"
-          placeholder="Site Status"
-          data={[
-            { label: "Active", value: "active" },
-            { label: "In-Active", value: "inactive" },
-          ]}
-          onChange={(val) => handleChange("siteStatus", val)}
-        />
+
         <SharedSelect
           label="Owner Ship Type"
           onChange={(val) => handleChange("ownerShipType", val)}
           placeholder="Owner Ship Type"
           data={[{ label: "COCO", value: "coco" }]}
         />
-        <SharedInput label="Area Name"           onChange={(val)=> handleChange('areaName', val)} placeholder="Enter Area Name" />
-        <SharedSelect
-          label="Country"
-          placeholder="Choose Country"
-          data={formattedCountry}
-          onChange={(val) => setCountry(val)}
-        />
-        <SharedSelect
-          label="State"
-          placeholder="Choose State"
-          data={formattedStates}
-          onChange={(state) => setState(state)}
-        />
-        <SharedSelect
-          label="City"
-          placeholder="Choose City"
-          data={formattedCities}
-          onChange={(valcity) => setCity(valcity)}
-        />
+
         <SharedInput
           label="Latitude"
           placeholder="Enter Latitude"
-          value={city}
+          onChange={(val) => handleChange("latitude", val)}
         />
         <SharedInput
           label="Longitude"
           placeholder="Enter Longitude"
-          value={city}
+          onChange={(val) => handleChange("longitude", val)}
         />
-        <SharedInput label="Secret Key" placeholder="Enter Secret Key" />
-        <SharedInput label="Size in sft" placeholder="Enter Size" />
-        <SharedInput
-          label="No. of Employee"
-          placeholder="Enter Number of Employee"
+          <TreeDropdown
+            data={treeData}
+            onSelect={(node) => setSelectedLabel(node.label)}
+            selected={selectedLabel}
+            title="Choose Parent Node"
+            required
+          />
+        <SharedTextArea
+          label="Address"
+          placeholder="Enter Site Address"
+          onChange={(val) => handleChange("fullAddress", val)}
         />
-        <SharedInput label="Monthly Rent" placeholder="Enter Monthly Rent" />
-        <SharedInput label="Controller Id" placeholder="Enter Controller ID" />
-        <SharedYesNoRadio
-          label="Final Report SMS"
-          value={smsMessage}
-          onChange={setSMSMessage}
-        />
-        <SharedYesNoRadio
-          label="Final Report Email"
-          value={smsMessage}
-          onChange={setSMSMessage}
-        />
-        <SharedYesNoRadio
-          label="Final Report WhatsApp"
-          value={smsMessage}
-          onChange={setSMSMessage}
-        />
-        <SharedTextArea label="Address" placeholder="Enter Site Address" />
       </div>
-      <div>
+      <div className="hidden">
         <h1 className="text-xl font-bold text-blue-700 underline">
           Report Recipients
         </h1>
@@ -182,15 +169,14 @@ const CreateSites = () => {
 
           <SharedInput label="WhatsApp Number" />
           <SharedYesNoRadio
-            label="
-WhatsApp Messages"
+            label="WhatsApp Messages"
             value={whatsappMessage}
             onChange={setWhatsAppMessage}
           />
         </div>
       </div>
       <div className="">
-        <SharedButton title="Submit" icon={<IoSaveOutline />} />
+        <SharedButton title="Submit" onClick={handleCreateSite} icon={<IoSaveOutline />} />
       </div>
     </div>
   );

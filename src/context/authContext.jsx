@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
         email: registrationData.email,
         user_name: registrationData.username,
         pass: registrationData.password,
+        companyName:registrationData.companyName,
         user_role: registrationData.role || 3,
       });
 
